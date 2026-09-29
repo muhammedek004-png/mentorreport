@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mentor Batch &amp; Module Report</title>
+<style>
+  :root {
+    --ink: #1c2530;
+    --muted: #5d6b7a;
+    --paper: #f7f8fa;
+    --card: #ffffff;
+    --line: #d9dee5;
+    --brand: #1f4e79;
+    --ok: #1e7b4f;
+    --ok-bg: #e2f3ea;
+    --warn: #a25b00;
+    --warn-bg: #fdf0d8;
+    --bad: #b3261e;
+    --bad-bg: #fbe5e3;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.5;
+  }
+  .page { max-width: 1000px; margin: 0 auto; padding: 24px 16px 48px; }
+
+  header.report-head {
+    border-bottom: 3px solid var(--brand);
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+  }
+  header h1 { margin: 0 0 12px; font-size: 1.7rem; color: var(--brand); }
+  .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px 24px; }
+  .meta div { font-size: .92rem; }
+  .meta span { color: var(--muted); display: block; font-size: .8rem; }
+  .meta input {
+    width: 100%; border: none; border-bottom: 1px dashed var(--line);
+    font: inherit; padding: 2px 0; background: transparent; color: var(--ink);
+  }
+
+  .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
+  .stat b { font-size: 1.6rem; display: block; color: var(--brand); }
+  .stat small { color: var(--muted); }
+
+  .batch {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .batch-head {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+    gap: 8px; padding: 14px 18px; background: #eef3f8; border-bottom: 1px solid var(--line);
+  }
+  .batch-head h2 { margin: 0; font-size: 1.15rem; }
+  .badge { padding: 3px 12px; border-radius: 999px; font-size: .8rem; font-weight: 600; }
+  .badge.ok { background: var(--ok-bg); color: var(--ok); }
+  .badge.warn { background: var(--warn-bg); color: var(--warn); }
+  .badge.bad { background: var(--bad-bg); color: var(--bad); }
+
+  .batch-body { padding: 18px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: .93rem; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { width: 34%; color: var(--muted); font-weight: 600; background: #fafbfc; }
+
+  .progress-label { display: flex; justify-content: space-between; font-size: .85rem; color: var(--muted); margin-bottom: 4px; }
+  .bar { height: 12px; background: #e6eaef; border-radius: 6px; overflow: hidden; margin-bottom: 18px; }
+  .bar i { display: block; height: 100%; background: var(--brand); }
+
+  .issue, .plan { border-left: 4px solid; padding: 10px 14px; border-radius: 4px; margin-bottom: 12px; }
+  .issue { border-color: var(--warn); background: var(--warn-bg); }
+  .plan { border-color: var(--ok); background: var(--ok-bg); }
+  .issue h3, .plan h3 { margin: 0 0 4px; font-size: .95rem; }
+  .plan ul { margin: 4px 0 0; padding-left: 18px; }
+  .none { color: var(--muted); font-style: italic; }
+
+  footer { margin-top: 32px; font-size: .85rem; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+  @media (max-width: 560px) {
+    th, td { display: block; width: 100%; }
+    th { border-bottom: none; padding-bottom: 0; }
+  }
+  @media print {
+    body { background: #fff; }
+    .batch { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="report-head">
+    <h1>  DATA ANALYTICS REPORT</h1>
+    <div class="meta">
+      <div><span>MUHAMMED EK</span><input value="Your Name"></div>
+      <div><span>28-09-2026</span><input type="date"></div>
+      <div><span>SEPTEMBER 2026</span><input value="Sept 2026"></div>
+    </div>
+  </header>
+
+  <section class="summary">
+    <div class="stat"><b>2</b><small>Total batches handled</small></div>
+    <div class="stat"><b>1</b><small>On schedule</small></div>
+    <div class="stat"><b>1</b><small>Delayed</small></div>
+  </section>
+
+  <!-- ===== BATCH 1 (copy this block for each batch) ===== -->
+  <article class="batch">
+    <div class="batch-head">
+      <h2>Batch A – Data Analytics</h2>
+      <span class="badge ok">DELAYED</span>
+    </div>
+    <div class="batch-body">
+      <table>
+        <tr><th>Current status</th><td>Ongoing</td></tr>
+        <tr><th>Classes completed</th><td>19</td></tr>
+        <tr><th>Classes remaining</th><td> 4 DAYS</td></tr>
+        <tr><th>Duration</th><td>1 SEP 2026 – 30 MAR 2027 (6 months)</td></tr>
+        <tr><th>Current module</th><td>Module 1 – PYTHON LOOP</td></tr>
+        <tr><th>As per planned schedule?</th><td>Yes</td></tr>
+      </table>
+      <div class="progress-label"><span>Batch progress</span><span>85%</span></div>
+      <div class="bar"><i style="width:85%"></i></div>
+      <p class="none"></p>
+    </div>
+    <div class="issue">
+        <h3>Reason for delay</h3>
+        Two sessions were lost to holidays, and students needed extra time on data cleaning.
+      </div>
+      <div class="plan">
+        <h3>Action plan to get back on track</h3>
+        <ul>
+          <li>Two extra revision classes on weekends</li>
+          <li>Shorten the practice section in Module 3 and give it as assignments</li>
+          <li>Weekly progress check until the schedule is recovered</li>
+        </ul>
+      </div>
+  </article>
+
+  <!-- ===== BATCH 2 (with delay example) ===== -->
+  <article class="batch">
+    <div class="batch-head">
+      <h2>Batch B – Python Basics</h2>
+      <span class="badge warn">NO DELAYED</span>
+    </div>
+    <div class="batch-body">
+      <table>
+        <tr><th>Current status</th><td>Ongoing</td></tr>
+        <tr><th>Classes completed</th><td>1</td></tr>
+        <tr><th>Classes remaining</th><td>0</td></tr>
+        <tr><th>Duration</th><td>21 SEP 2026 – 21 MAR 2027</td></tr>
+        <tr><th>Current module</th><td>Module 1 – PYTHON</td></tr>
+        <tr><th>As per planned schedule?</th><td>YES</td></tr>
+      </table>
+      <div class="progress-label"><span>Batch progress</span><span>100%</span></div>
+      <div class="bar"><i style="width:100%"></i></div>
+
+      
+    </div>
+  </article>
+
+  <!-- ===== BATCH 3 ===== -->
+  <article class="batch">
+    <div class="batch-head">
+      <h2>Batch C – Power BI</h2>
+      <span class="badge ok">On track</span>
+    </div>
+    <div class="batch-body">
+      <table>
+        <tr><th>Current status</th><td>Ongoing</td></tr>
+        <tr><th>Classes completed</th><td>8</td></tr>
+        <tr><th>Classes ongoing / remaining</th><td>1 ongoing, 14 remaining</td></tr>
+        <tr><th>Duration</th><td>1 Sept 2026 – 31 Dec 2026</td></tr>
+        <tr><th>Current module</th><td>Module 1 – Data Modelling</td></tr>
+        <tr><th>As per planned schedule?</th><td>Yes</td></tr>
+      </table>
+      <div class="progress-label"><span>Batch progress</span><span>35%</span></div>
+      <div class="bar"><i style="width:35%"></i></div>
+      <p class="none">No delay or deviation.</p>
+    </div>
+  </article>
+
+  <footer>
+    <span>Prepared by: ____________________</span>
+    <span>Signature / Date: ____________________</span>
+  </footer>
+</div>
+</body>
+</html>
