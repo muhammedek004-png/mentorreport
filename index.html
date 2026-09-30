@@ -667,11 +667,11 @@
   var activeVoices = [];
   var currentMusic = 'calm';
   var musicPatterns = {
-    calm: { notes: [174.61, 220, 261.63], filter: 1800, volume: 0.09, drift: 0.08 },
-    breeze: { notes: [146.83, 174.61, 220], filter: 1600, volume: 0.08, drift: 0.09 },
-    piano: { notes: [130.81, 174.61, 220], filter: 1700, volume: 0.09, drift: 0.07 },
-    lofi: { notes: [110, 146.83, 196], filter: 1500, volume: 0.08, drift: 0.1 },
-    rain: { notes: [98, 130.81, 174.61], filter: 1400, volume: 0.1, drift: 0.11 }
+    calm: { notes: [196, 246.94, 293.66], filter: 1400, volume: 0.08, drift: 0.08, wave: 'sine' },
+    breeze: { notes: [164.81, 220, 277.18], filter: 1300, volume: 0.07, drift: 0.09, wave: 'sine' },
+    piano: { notes: [130.81, 174.61, 220], filter: 1200, volume: 0.08, drift: 0.07, wave: 'triangle' },
+    lofi: { notes: [110, 146.83, 196], filter: 1100, volume: 0.07, drift: 0.1, wave: 'triangle' },
+    rain: { notes: [98, 130.81, 174.61], filter: 1000, volume: 0.08, drift: 0.11, wave: 'sine' }
   };
 
   function ensureAudioContext() {
@@ -682,8 +682,8 @@
       audioContext = new AudioCtx();
       filterNode = audioContext.createBiquadFilter();
       filterNode.type = 'lowpass';
-      filterNode.frequency.value = 1700;
-      filterNode.Q.value = 0.5;
+      filterNode.frequency.value = 1200;
+      filterNode.Q.value = 0.4;
 
       masterGain = audioContext.createGain();
       masterGain.gain.value = 0.0001;
@@ -703,11 +703,10 @@
 
     activeVoices.forEach(function (voice) {
       try {
-        voice.lfoGain.gain.cancelScheduledValues(audioContext.currentTime);
         voice.gain.gain.cancelScheduledValues(audioContext.currentTime);
       } catch (e) {}
-      try { voice.lfo.stop(audioContext.currentTime + 0.15); } catch (e) {}
-      try { voice.oscillator.stop(audioContext.currentTime + 0.15); } catch (e) {}
+      try { voice.lfo.stop(audioContext.currentTime + 0.2); } catch (e) {}
+      try { voice.oscillator.stop(audioContext.currentTime + 0.2); } catch (e) {}
       try { voice.lfo.disconnect(); } catch (e) {}
       try { voice.oscillator.disconnect(); } catch (e) {}
       try { voice.gain.disconnect(); } catch (e) {}
@@ -716,7 +715,7 @@
     activeVoices = [];
     try {
       masterGain.gain.cancelScheduledValues(audioContext.currentTime);
-      masterGain.gain.setTargetAtTime(0.0001, audioContext.currentTime, 0.25);
+      masterGain.gain.setTargetAtTime(0.0001, audioContext.currentTime, 0.35);
     } catch (e) {}
   }
 
@@ -733,13 +732,13 @@
       var lfo = audioContext.createOscillator();
       var lfoGain = audioContext.createGain();
 
-      oscillator.type = 'sine';
+      oscillator.type = config.wave || 'sine';
       oscillator.frequency.value = freq;
       gainNode.gain.value = 0.0001;
 
       lfo.type = 'sine';
-      lfo.frequency.value = config.drift + index * 0.04;
-      lfoGain.gain.value = 6 + index * 4;
+      lfo.frequency.value = config.drift + index * 0.03;
+      lfoGain.gain.value = 4 + index * 2;
 
       lfo.connect(lfoGain);
       lfoGain.connect(oscillator.frequency);
@@ -748,7 +747,7 @@
 
       var now = audioContext.currentTime;
       gainNode.gain.setValueAtTime(0.0001, now);
-      gainNode.gain.linearRampToValueAtTime(config.volume + index * 0.02, now + 1.2);
+      gainNode.gain.linearRampToValueAtTime(config.volume + index * 0.015, now + 1.6);
 
       oscillator.start(now);
       lfo.start(now);
@@ -756,8 +755,8 @@
       activeVoices.push({ oscillator: oscillator, gain: gainNode, lfo: lfo, lfoGain: lfoGain });
     });
 
-    filterNode.frequency.setTargetAtTime(config.filter, audioContext.currentTime, 0.6);
-    masterGain.gain.setTargetAtTime(0.14, audioContext.currentTime, 1.0);
+    filterNode.frequency.setTargetAtTime(config.filter, audioContext.currentTime, 0.9);
+    masterGain.gain.setTargetAtTime(0.12, audioContext.currentTime, 1.2);
   }
 
   function setAudioTrack(trackName) {
