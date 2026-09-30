@@ -144,14 +144,6 @@
   .audio-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; }
   .audio-btn.active { background: rgba(53,230,255,.1); border-color: var(--cyan); color: var(--cyan); }
 
-  .music-picker { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
-  .music-option {
-    border: 1px solid var(--line); background: rgba(120,130,160,.08); color: var(--muted);
-    border-radius: 999px; padding: 4px 8px; font-size: .62rem; letter-spacing: .04em; text-transform: uppercase;
-    cursor: pointer; transition: all .2s ease;
-  }
-  .music-option.active { background: rgba(53,230,255,.12); border-color: var(--cyan); color: var(--cyan); }
-
   .cursor-style-picker { display: flex; flex-direction: column; gap: 8px; }
   .cursor-style-picker .swatches { display: flex; gap: 8px; flex-wrap: wrap; }
   .cursor-style-btn {
@@ -480,13 +472,6 @@
         </svg>
       </button>
     </div>
-    <div class="music-picker" aria-label="Music options">
-      <button class="music-option active" type="button" data-music="calm">Calm</button>
-      <button class="music-option" type="button" data-music="forest">Forest</button>
-      <button class="music-option" type="button" data-music="piano">Piano</button>
-      <button class="music-option" type="button" data-music="ocean">Ocean</button>
-      <button class="music-option" type="button" data-music="night">Night</button>
-    </div>
   </div>
   <div class="cursor-style-picker">
     <div class="group-label">Cursor style</div>
@@ -660,7 +645,6 @@
   document.querySelector('.mode-toggle .icon-btn[data-mode="dark"]').classList.add('active');
 
   var audioBtn = document.querySelector('.audio-btn');
-  var musicOptions = document.querySelectorAll('.music-option');
   var audioContext = null;
   var masterGain = null;
   var filterNode = null;
@@ -762,9 +746,6 @@
   function setAudioTrack(trackName) {
     var validTrack = musicPatterns[trackName] ? trackName : 'calm';
     currentMusic = validTrack;
-    musicOptions.forEach(function (btn) {
-      btn.classList.toggle('active', btn.getAttribute('data-music') === validTrack);
-    });
     if (audioBtn && audioBtn.getAttribute('data-audio') === 'on') {
       startAmbientAudio(validTrack);
     }
@@ -791,12 +772,6 @@
       setAudioState(!enabled);
     });
   }
-
-  musicOptions.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      setAudioTrack(btn.getAttribute('data-music'));
-    });
-  });
 
   setAudioTrack(currentMusic);
   setAudioState(false);
