@@ -482,10 +482,10 @@
     </div>
     <div class="music-picker" aria-label="Music options">
       <button class="music-option active" type="button" data-music="calm">Calm</button>
-      <button class="music-option" type="button" data-music="breeze">Breeze</button>
+      <button class="music-option" type="button" data-music="forest">Forest</button>
       <button class="music-option" type="button" data-music="piano">Piano</button>
-      <button class="music-option" type="button" data-music="lofi">Lofi</button>
-      <button class="music-option" type="button" data-music="rain">Rain</button>
+      <button class="music-option" type="button" data-music="ocean">Ocean</button>
+      <button class="music-option" type="button" data-music="night">Night</button>
     </div>
   </div>
   <div class="cursor-style-picker">
@@ -667,11 +667,11 @@
   var activeVoices = [];
   var currentMusic = 'calm';
   var musicPatterns = {
-    calm: { notes: [196, 246.94, 293.66], filter: 1400, volume: 0.08, drift: 0.08, wave: 'sine' },
-    breeze: { notes: [164.81, 220, 277.18], filter: 1300, volume: 0.07, drift: 0.09, wave: 'sine' },
-    piano: { notes: [130.81, 174.61, 220], filter: 1200, volume: 0.08, drift: 0.07, wave: 'triangle' },
-    lofi: { notes: [110, 146.83, 196], filter: 1100, volume: 0.07, drift: 0.1, wave: 'triangle' },
-    rain: { notes: [98, 130.81, 174.61], filter: 1000, volume: 0.08, drift: 0.11, wave: 'sine' }
+    calm: { notes: [196, 246.94, 293.66, 349.23], filter: 1500, volume: 0.06, drift: 0.05, wave: 'sine' },
+    forest: { notes: [146.83, 196, 246.94, 293.66], filter: 1200, volume: 0.05, drift: 0.07, wave: 'triangle' },
+    piano: { notes: [130.81, 174.61, 220, 261.63], filter: 1100, volume: 0.06, drift: 0.04, wave: 'triangle' },
+    ocean: { notes: [98, 146.83, 174.61, 220], filter: 1000, volume: 0.05, drift: 0.09, wave: 'sine' },
+    night: { notes: [110, 164.81, 220, 293.66], filter: 1300, volume: 0.06, drift: 0.06, wave: 'sine' }
   };
 
   function ensureAudioContext() {
