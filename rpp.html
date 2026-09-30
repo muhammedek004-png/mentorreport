@@ -143,6 +143,13 @@
   }
   .audio-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; }
   .audio-btn.active { background: rgba(53,230,255,.1); border-color: var(--cyan); color: var(--cyan); }
+  .music-picker { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+  .music-option {
+    border: 1px solid var(--line); background: rgba(120,130,160,.08); color: var(--muted);
+    border-radius: 999px; padding: 4px 8px; font-size: .62rem; letter-spacing: .04em; text-transform: uppercase;
+    cursor: pointer; transition: all .2s ease;
+  }
+  .music-option.active { background: rgba(53,230,255,.12); border-color: var(--cyan); color: var(--cyan); }
 
   .cursor-style-picker { display: flex; flex-direction: column; gap: 8px; }
   .cursor-style-picker .swatches { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -472,6 +479,13 @@
         </svg>
       </button>
     </div>
+    <div class="music-picker" aria-label="Music options">
+      <button class="music-option active" type="button" data-music="calm">Calm</button>
+      <button class="music-option" type="button" data-music="drift">Drift</button>
+      <button class="music-option" type="button" data-music="piano">Piano</button>
+      <button class="music-option" type="button" data-music="forest">Forest</button>
+      <button class="music-option" type="button" data-music="night">Night</button>
+    </div>
   </div>
   <div class="cursor-style-picker">
     <div class="group-label">Cursor style</div>
@@ -645,17 +659,18 @@
   document.querySelector('.mode-toggle .icon-btn[data-mode="dark"]').classList.add('active');
 
   var audioBtn = document.querySelector('.audio-btn');
+  var musicOptions = document.querySelectorAll('.music-option');
   var audioContext = null;
   var masterGain = null;
   var filterNode = null;
   var activeVoices = [];
   var currentMusic = 'calm';
   var musicPatterns = {
-    calm: { notes: [196, 246.94, 293.66, 349.23], filter: 1800, volume: 0.11, drift: 0.05, wave: 'sine' },
-    forest: { notes: [146.83, 196, 246.94, 293.66], filter: 1500, volume: 0.1, drift: 0.07, wave: 'triangle' },
-    piano: { notes: [130.81, 174.61, 220, 261.63], filter: 1400, volume: 0.12, drift: 0.04, wave: 'triangle' },
-    ocean: { notes: [98, 146.83, 174.61, 220], filter: 1300, volume: 0.1, drift: 0.09, wave: 'sine' },
-    night: { notes: [110, 164.81, 220, 293.66], filter: 1600, volume: 0.11, drift: 0.06, wave: 'sine' }
+    calm: { notes: [196, 246.94, 293.66, 349.23], filter: 1600, volume: 0.055, drift: 0.05, wave: 'sine' },
+    drift: { notes: [146.83, 196, 220, 261.63], filter: 1400, volume: 0.05, drift: 0.08, wave: 'triangle' },
+    piano: { notes: [130.81, 174.61, 220, 261.63], filter: 1300, volume: 0.05, drift: 0.04, wave: 'sine' },
+    forest: { notes: [98, 146.83, 174.61, 196], filter: 1200, volume: 0.048, drift: 0.07, wave: 'triangle' },
+    night: { notes: [110, 146.83, 220, 293.66], filter: 1400, volume: 0.052, drift: 0.06, wave: 'sine' }
   };
 
   function ensureAudioContext() {
@@ -667,7 +682,7 @@
       filterNode = audioContext.createBiquadFilter();
       filterNode.type = 'lowpass';
       filterNode.frequency.value = 1200;
-      filterNode.Q.value = 0.4;
+      filterNode.Q.value = 0.3;
 
       masterGain = audioContext.createGain();
       masterGain.gain.value = 0.0001;
@@ -699,7 +714,7 @@
     activeVoices = [];
     try {
       masterGain.gain.cancelScheduledValues(audioContext.currentTime);
-      masterGain.gain.setTargetAtTime(0.0001, audioContext.currentTime, 0.35);
+      masterGain.gain.setTargetAtTime(0.0001, audioContext.currentTime, 0.45);
     } catch (e) {}
   }
 
@@ -722,7 +737,7 @@
 
       lfo.type = 'sine';
       lfo.frequency.value = config.drift + index * 0.03;
-      lfoGain.gain.value = 7 + index * 3;
+      lfoGain.gain.value = 2.4 + index * 1.8;
 
       lfo.connect(lfoGain);
       lfoGain.connect(oscillator.frequency);
@@ -731,7 +746,7 @@
 
       var now = audioContext.currentTime;
       gainNode.gain.setValueAtTime(0.0001, now);
-      gainNode.gain.linearRampToValueAtTime(config.volume + index * 0.02, now + 1.6);
+      gainNode.gain.linearRampToValueAtTime(config.volume + index * 0.012, now + 1.6);
 
       oscillator.start(now);
       lfo.start(now);
@@ -739,13 +754,16 @@
       activeVoices.push({ oscillator: oscillator, gain: gainNode, lfo: lfo, lfoGain: lfoGain });
     });
 
-    filterNode.frequency.setTargetAtTime(config.filter, audioContext.currentTime, 0.9);
-    masterGain.gain.setTargetAtTime(0.28, audioContext.currentTime, 1.2);
+    filterNode.frequency.setTargetAtTime(config.filter, audioContext.currentTime, 0.8);
+    masterGain.gain.setTargetAtTime(0.15, audioContext.currentTime, 1.2);
   }
 
   function setAudioTrack(trackName) {
     var validTrack = musicPatterns[trackName] ? trackName : 'calm';
     currentMusic = validTrack;
+    musicOptions.forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-music') === validTrack);
+    });
     if (audioBtn && audioBtn.getAttribute('data-audio') === 'on') {
       startAmbientAudio(validTrack);
     }
@@ -772,6 +790,12 @@
       setAudioState(!enabled);
     });
   }
+
+  musicOptions.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      setAudioTrack(btn.getAttribute('data-music'));
+    });
+  });
 
   setAudioTrack(currentMusic);
   setAudioState(false);
